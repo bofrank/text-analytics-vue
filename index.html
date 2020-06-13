@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Text Analytics in Vue</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="app" class="text-center">
+
+        <h1>Azure Cognitive Services Text Analytics in Vue</h1>
+        <br />
+        <div class="m-5">
+            <span class="font-weight-bold">Sample string:</span> {{scrapings}}
+        </div>
+        <br />
+        <br />
+        <button type="button" class="btn btn-primary" v-on:click="getDataFetch(scrapings)">Analyze Sample String</button>
+        <br />
+        <br />
+
+        <div v-if="fetched">
+            <div class="row font-weight-bold">
+                <div class="col col-md-4">
+                    Entity Type
+                </div>
+                <div class="col col-md-4">
+                    Entity Name
+                </div>
+                <div class="col col-md-4">
+                    Wikipedia Link
+                </div>
+            </div>
+            <div v-for="entity in fetched.entities" :key="entity">
+                <div class="row">
+                    <div class="col col-md-4">
+                        {{ entity.type }}
+                    </div>
+                    <div class="col col-md-4">
+                        {{ entity.name }}
+                    </div>
+                    <div class="col col-md-4">
+                        <a :href="entity.wikipediaUrl" target="_blank">{{ entity.wikipediaId }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data() {
+                return {
+                    name: 'World',
+                    heroes: [],
+                    document: '',
+                    results: null,
+                    counter: this.initialCounter,
+                    scrapings: 'Our industry has been called upon to help address the world’s most acute needs through this crisis. And I’m proud of how all of you have raised the game and being there when the world needed you the most, serving as those digital first responders to the first responders out there for whom we are very thankful. And for me, that’s been a point of light emits this crisis, seeing developers come together with those on the front lines. At Johns Hopkins University, epidemiologists and software developers created that canonical dashboard to track the spread of COVID-19. Adaptive Biotechnologies using the cloud compute and AI to decode the immune system’s response to the virus. In the United Kingdom across section, manufacturers adjusted their production lines to build ventilators for the NHS using mixed reality to guide workers through the process. The NBA is using the power of the cloud and Xbox to engage fans and maintain the joy of the game. - Satya Nadella',
+                    title: '',
+                    fetched: null
+                }
+            },
+            methods: {
+                getDataFetch: function (scrapingData) {
+                    const subscription_key = "put your key here";
+                    const endpoint = "https://artintelligence.cognitiveservices.azure.com/text/analytics/v2.1/entities";
+                    fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Ocp-Apim-Subscription-Key': subscription_key
+                        },
+                        body: JSON.stringify({ 'documents': [{ "id": "1", "language": "en", "text": scrapingData }] })
+                    })
+                        .then(response => {
+                            return response.json();
+                        })
+                        .then(documentsJSON => {
+                            if (documentsJSON.documents[0].entities.length > 0) {
+                                this.fetched = documentsJSON.documents[0];
+                            }
+                        })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
