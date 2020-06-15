@@ -1,6 +1,5 @@
 # text-analytics-vue
 Implementation of Azure Cognitive Services Text Analytics in Vue
-Implementation of Azure Cognitive Service Text Analytics in Vue 
 
  
 
