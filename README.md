@@ -10,7 +10,7 @@ This is an example of how to use Azure Cognitive Service Text Analytics in the V
 ![Screenshot](/images/screenshot.png)
 Format: ![Alt Text](url)
  
- ![Screenshot](/images/diagram.png)
+ ![Diagram](/images/diagram.png)
 Format: ![Alt Text](url)
 
  
